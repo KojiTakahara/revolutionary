@@ -1,7 +1,6 @@
 package revolutionary
 
 import (
-	"api"
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/render"
 	"net/http"

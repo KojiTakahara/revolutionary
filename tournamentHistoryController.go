@@ -1,15 +1,15 @@
-package revolutionary.api
+package revolutionary
 
 import (
 	"appengine"
 	"appengine/datastore"
 	"appengine/urlfetch"
+	"fmt"
 	"github.com/PuerkitoBio/goquery"
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/render"
 	"net/http"
 	"strconv"
-	"strings"
 )
 
 func CreateTournamentHistory(r render.Render, params martini.Params, w http.ResponseWriter, req *http.Request) {
@@ -31,5 +31,10 @@ func scrapingVault(id int, req *http.Request) *TournamentHistory {
 	c := appengine.NewContext(req)
 	client := urlfetch.Client(c)
 	resp, _ := client.Get(url)
-	return &TournamentHistory{}
+	doc, _ := goquery.NewDocumentFromResponse(resp)
+	title := doc.Find(".player")
+	//c.Infof(title)
+	result := &TournamentHistory{}
+	result.Name = ""
+	return result
 }
