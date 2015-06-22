@@ -4,12 +4,12 @@ import (
 	"appengine"
 	"appengine/datastore"
 	"appengine/urlfetch"
-	"fmt"
 	"github.com/PuerkitoBio/goquery"
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/render"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 func CreateTournamentHistory(r render.Render, params martini.Params, w http.ResponseWriter, req *http.Request) {
@@ -32,9 +32,32 @@ func scrapingVault(id int, req *http.Request) *TournamentHistory {
 	client := urlfetch.Client(c)
 	resp, _ := client.Get(url)
 	doc, _ := goquery.NewDocumentFromResponse(resp)
-	title := doc.Find(".player")
-	//c.Infof(title)
+	doc.Find(".player").Each(func(_ int, s *goquery.Selection) {
+		player := s.Find("a").Text()
+		if player != "" {
+			c.Infof("%s", player)
+
+			color := s.Find(".civilcube").Text()
+			c.Infof("%s", color)
+
+			deckType := s.Find(".fontS").Text()
+			c.Infof("%s", deckType)
+			c.Infof("========")
+		}
+	})
+
+	loop := true
+	gameCount := 1
+	for loop {
+		p := doc.Find("#game_" + strconv.Itoa(gameCount) + " div").Text()
+		c.Infof("%s", p)
+		if p == "" {
+			loop = false
+		}
+		gameCount++
+	}
+
 	result := &TournamentHistory{}
-	result.Name = ""
+	result.Date = time.Now()
 	return result
 }
