@@ -9,7 +9,6 @@ import (
 	"github.com/martini-contrib/render"
 	"net/http"
 	"strconv"
-	"time"
 )
 
 func CreateTournamentHistory(r render.Render, params martini.Params, w http.ResponseWriter, req *http.Request) {
@@ -56,8 +55,7 @@ func scrapingVault(id int, req *http.Request) *TournamentHistory {
 		}
 		gameCount++
 	}
-
 	result := &TournamentHistory{}
-	result.Date = time.Now()
+	result.Date = now()
 	return result
 }
