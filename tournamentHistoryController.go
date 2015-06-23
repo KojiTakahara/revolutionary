@@ -9,53 +9,82 @@ import (
 	"github.com/martini-contrib/render"
 	"net/http"
 	"strconv"
+	"strings"
 )
 
 func CreateTournamentHistory(r render.Render, params martini.Params, w http.ResponseWriter, req *http.Request) {
 	tournamentId, _ := strconv.Atoi(params["tournamentId"])
-	history := scrapingVault(tournamentId, req)
-	c := appengine.NewContext(req)
-	key := datastore.NewKey(c, "TournamentHistory", "", 0, nil)
-	key, err := datastore.Put(c, key, history)
-	if err != nil {
-		c.Criticalf("save error.")
-	} else {
-		c.Infof("success.")
-	}
+	scrapingVault(tournamentId, req)
 	r.JSON(200, "")
 }
 
-func scrapingVault(id int, req *http.Request) *TournamentHistory {
+func scrapingVault(id int, req *http.Request) {
 	url := "http://dmvault.ath.cx/duel/tournament_history.php?tournamentId=" + strconv.Itoa(id)
 	c := appengine.NewContext(req)
+	now := now()
 	client := urlfetch.Client(c)
 	resp, _ := client.Get(url)
 	doc, _ := goquery.NewDocumentFromResponse(resp)
-	doc.Find(".player").Each(func(_ int, s *goquery.Selection) {
-		player := s.Find("a").Text()
-		if player != "" {
-			c.Infof("%s", player)
-
-			color := s.Find(".civilcube").Text()
-			c.Infof("%s", color)
-
-			deckType := s.Find(".fontS").Text()
-			c.Infof("%s", deckType)
-			c.Infof("========")
-		}
-	})
-
+	winPlayers := []string{}
 	loop := true
 	gameCount := 1
 	for loop {
 		p := doc.Find("#game_" + strconv.Itoa(gameCount) + " div").Text()
-		c.Infof("%s", p)
+		winPlayers = append(winPlayers, p)
 		if p == "" {
 			loop = false
 		}
 		gameCount++
 	}
-	result := &TournamentHistory{}
-	result.Date = now()
+	doc.Find(".player").Each(func(_ int, s *goquery.Selection) {
+		a := s.Find("a")
+		playerName := a.Text()
+
+		if playerName != "" {
+			history := &TournamentHistory{}
+			history.PlayerName = playerName
+			playerLink, _ := a.Attr("href")
+			history.PlayerId = strings.Trim(playerLink, "/author/")
+			history.Date = now
+			s.Find(".civilcube").Each(func(_ int, s *goquery.Selection) {
+				color := s.Text()
+				if color == "光" {
+					history.Light = true
+				} else if color == "水" {
+					history.Water = true
+				} else if color == "闇" {
+					history.Dark = true
+				} else if color == "火" {
+					history.Fire = true
+				} else if color == "自" {
+					history.Nature = true
+				} else if color == "ゼ" {
+					history.Zero = true
+				}
+			})
+			deckTypes := strings.Split(s.Find(".fontS").Text(), "（")
+			if 1 < len(deckTypes) {
+				history.Race = strings.Trim(deckTypes[1], "）")
+			}
+			history.Type = deckTypes[0]
+			history.Win = countWin(playerName, winPlayers)
+
+			keyStr := now.Format("20060102") + "_" + history.PlayerId
+			key := datastore.NewKey(c, "TournamentHistory", keyStr, 0, nil)
+			_, err := datastore.Put(c, key, history)
+			if err != nil {
+				c.Criticalf("save error. " + keyStr)
+			}
+		}
+	})
+}
+
+func countWin(p string, winP []string) int {
+	result := 0
+	for i := range winP {
+		if p == winP[i] {
+			result++
+		}
+	}
 	return result
 }
