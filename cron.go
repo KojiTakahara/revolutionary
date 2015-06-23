@@ -4,16 +4,23 @@ import (
 	"appengine"
 	"appengine/datastore"
 	"appengine/urlfetch"
+	"fmt"
 	"github.com/PuerkitoBio/goquery"
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/render"
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func CreateTournamentHistory(r render.Render, params martini.Params, w http.ResponseWriter, req *http.Request) {
 	tournamentId, _ := strconv.Atoi(params["tournamentId"])
+
+	t, _ := time.Parse("2006-01-02", "2014-12-31")
+	d := now().Sub(t)
+	fmt.Println(d)
+
 	scrapingVault(tournamentId, req)
 	r.JSON(200, "")
 }
