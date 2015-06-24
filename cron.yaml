@@ -1,5 +1,5 @@
 cron:
 - description: regist history
-  url: /api/cron/tournament_history/
-  schedule: eevery day 05:00
+  url: /api/cron/tournament_history/0
+  schedule: every day 05:00
   timezone: Asia/Tokyo
