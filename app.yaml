@@ -34,3 +34,6 @@ handlers:
 
 - url: /api/.*
   script: _go_app
+
+- url: /cron/.*
+  script: _go_app

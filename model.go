@@ -5,7 +5,8 @@ import (
 )
 
 type TournamentHistory struct {
-	PlayerName string
+	Id         int
+	PlayerName string `datastore:",noindex"`
 	PlayerId   string
 	Type       string
 	Race       string

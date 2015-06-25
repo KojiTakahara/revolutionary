@@ -50,13 +50,9 @@ func scrapingVault(id int, req *http.Request) {
 	doc.Find(".player").Each(func(_ int, s *goquery.Selection) {
 		a := s.Find("a")
 		playerName := a.Text()
-
 		if playerName != "" {
 			history := &TournamentHistory{}
-			history.PlayerName = playerName
 			playerLink, _ := a.Attr("href")
-			history.PlayerId = strings.Trim(playerLink, "/author/")
-			history.Date = date
 			s.Find(".civilcube").Each(func(_ int, s *goquery.Selection) {
 				color := s.Text()
 				if color == "光" {
@@ -77,16 +73,18 @@ func scrapingVault(id int, req *http.Request) {
 			if 1 < len(deckTypes) {
 				history.Race = strings.Trim(deckTypes[1], "）")
 			}
+			history.Id = id
+			history.PlayerName = playerName
+			history.Date = date
+			history.PlayerId = strings.Trim(playerLink, "/author/")
 			history.Type = deckTypes[0]
 			history.Win = countWin(playerName, winPlayers)
-
 			keyStr := date.Format("20060102") + "_" + history.PlayerId
 			key := datastore.NewKey(c, "TournamentHistory", keyStr, 0, nil)
 			_, err := datastore.Put(c, key, history)
 			if err != nil {
 				c.Criticalf("save error. " + keyStr)
 			}
-			//datastore.Delete(c, key)
 		}
 	})
 }
@@ -94,7 +92,7 @@ func scrapingVault(id int, req *http.Request) {
 /**
  * 開催日付を取得
  */
-func getDate(doc *goquery.Document6) time.Time {
+func getDate(doc *goquery.Document) time.Time {
 	info := doc.Find("#rightContainer p").Text()
 	runes := []rune(info)
 	date := now()
