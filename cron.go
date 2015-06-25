@@ -33,17 +33,7 @@ func scrapingVault(id int, req *http.Request) {
 	resp, _ := client.Get(vaultUrl + strconv.Itoa(id))
 	doc, _ := goquery.NewDocumentFromResponse(resp)
 
-	info := doc.Find("#rightContainer p").Text()
-	runes := []rune(info)
-	date := now()
-	switch len(info) {
-	case 94:
-		date = stringToTime(string(runes[5:20]))
-	case 95:
-		date = stringToTime(string(runes[5:21]))
-	case 96:
-		date = stringToTime(string(runes[5:22]))
-	}
+	date := getDate(doc)
 
 	winPlayers := []string{}
 	loop := true
@@ -96,10 +86,32 @@ func scrapingVault(id int, req *http.Request) {
 			if err != nil {
 				c.Criticalf("save error. " + keyStr)
 			}
+			//datastore.Delete(c, key)
 		}
 	})
 }
 
+/**
+ * 開催日付を取得
+ */
+func getDate(doc *goquery.Document6) time.Time {
+	info := doc.Find("#rightContainer p").Text()
+	runes := []rune(info)
+	date := now()
+	switch len(info) {
+	case 94:
+		date, _ = stringToTime(string(runes[5:20]))
+	case 95:
+		date, _ = stringToTime(string(runes[5:21]))
+	case 96:
+		date, _ = stringToTime(string(runes[5:22]))
+	}
+	return date
+}
+
+/**
+ * 勝利数を取得
+ */
 func countWin(p string, winP []string) int {
 	result := 0
 	for i := range winP {
