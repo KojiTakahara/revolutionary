@@ -5,6 +5,8 @@ var app = angular.module('app', [
 
 app.controller('indexCtrl', ['$scope', '$http', '$sce', '$window', function($scope, $http, $sce, $window) {
 
+  $scope.data = [];
+
   $scope.submit = function() {
     $http({
       method: "GET",
@@ -15,17 +17,89 @@ app.controller('indexCtrl', ['$scope', '$http', '$sce', '$window', function($sco
         // count: $scope.count
       }
     }).success(function(data) {
-      console.log(data);
-    }).error(function(data, status, headers, config) {
+      $scope.data = data;
     });
+  };
 
+  $scope.submit();
+
+  $scope.viewType = function() {
+    var obj = {};
+    for (var i = 0; i < $scope.data.length; i++) {
+      if ($scope.data[i].Type === "") {
+        continue;
+      }
+      if (obj[$scope.data[i].Type] === undefined) {
+        obj[$scope.data[i].Type] = 1;
+      } else {
+        obj[$scope.data[i].Type]++;
+      }
+    }
+    var columns = [];
+    for (var key in obj) {
+      columns.push([key, obj[key]]);
+    }
+    typeDonut(columns, "deck type");
+  };
+
+  $scope.viewRace = function() {
+    var obj = {};
+    for (var i = 0; i < $scope.data.length; i++) {
+      if ($scope.data[i].Race === "") {
+        continue;
+      }
+      if (obj[$scope.data[i].Race] === undefined) {
+        obj[$scope.data[i].Race] = 1;
+      } else {
+        obj[$scope.data[i].Race]++;
+      }
+    }
+    var columns = [];
+    for (var key in obj) {
+      columns.push([key, obj[key]]);
+    }
+    typeDonut(columns, "deck race");
+  };
+
+  $scope.viewColor = function() {
+    var light = ["light"],
+        water = ["water"],
+        dark = ["dark"],
+        fire = ["fire"],
+        nature = ["nature"],
+        zero = ["zero"];
+    for (var i = 0; i < $scope.data.length; i++) {
+      if ($scope.data[i].Light) {
+        light.push(1);
+      }
+      if ($scope.data[i].Water) {
+        water.push(1);
+      }
+      if ($scope.data[i].Dark) {
+        dark.push(1);
+      }
+      if ($scope.data[i].Fire) {
+        fire.push(1);
+      }
+      if ($scope.data[i].Nature) {
+        nature.push(1);
+      }
+      if ($scope.data[i].Zero) {
+        zero.push(1);
+      }
+    }
+    typeDonut([light, water, dark, fire, nature, zero], "deck color");
+  };
+
+  var typeDonut = function(columns, title) {
     $scope.chart = c3.generate({
       bindto: '#chart',
       data: {
-        columns: [
-          ['data1', 30, 200, 100, 400, 150, 250],
-          ['data2', 50, 20, 10, 40, 15, 25]
-        ]
+        columns: columns,
+        type : "donut"
+      },
+      donut: {
+        title: title
       }
     });
   };
