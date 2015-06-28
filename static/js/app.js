@@ -1,6 +1,7 @@
 "use strict";
 
 var app = angular.module('app', [
+  "720kb.datepicker"
 ]);
 
 app.controller('indexCtrl', ['$scope', '$http', '$sce', '$window', function($scope, $http, $sce, $window) {
@@ -11,17 +12,16 @@ app.controller('indexCtrl', ['$scope', '$http', '$sce', '$window', function($sco
     $http({
       method: "GET",
       url: "/api/tournament_history",
-      param: {
-        // startDate: $scope.startDate,
-        // endDate: $scope.endDate,
+      params: {
+        startDate: $scope.startDate,
+        endDate: $scope.endDate,
         // count: $scope.count
       }
     }).success(function(data) {
       $scope.data = data;
+      $scope.viewType();
     });
   };
-
-  $scope.submit();
 
   $scope.viewType = function() {
     var obj = {};

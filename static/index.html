@@ -4,21 +4,33 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, maximum-scale=1">
   <title>たいとる</title>
-  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
   <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="/css/angular-datepicker.min.css" rel="stylesheet" type="text/css" />
   <link href="/css/c3.min.css" rel="stylesheet" type="text/css">
+</head>
+<body ng-app="app" ng-controller="indexCtrl">
+  <button ng-click="viewColor()">文明</button>
+  <button ng-click="viewType()">タイプ</button>
+  <button ng-click="viewRace()">種族</button>
+
+  <datepicker date-set="2015/06/01" date-format="yyyy-MM-dd">
+    <input ng-model="startDate" type="text" placeholder="start date" />
+  </datepicker>
+  <datepicker date-set="2015/06/01" date-format="yyyy-MM-dd">
+    <input ng-model="endDate" type="text" placeholder="end date"/>
+  </datepicker>
+
+  <button ng-click="submit()">ぼたん</button>
+
+  <div id="chart"></div>
+
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
   <script src="/js/d3.min.js"></script>
   <script src="/js/c3.min.js"></script>
   <script src="/js/app.js"></script>
+  <script src="/js/angular-datepicker.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-</head>
-<body ng-app="app" ng-controller="indexCtrl">
-  <button ng-click="submit()">ぼたん</button>
-  <button ng-click="viewColor()">文明</button>
-  <button ng-click="viewType()">タイプ</button>
-  <button ng-click="viewRace()">種族</button>
-  <div id="chart"></div>
 </body>
 </html>
