@@ -17,6 +17,9 @@ import (
 
 const vaultUrl = "http://dmvault.ath.cx/duel/tournament_history.php?tournamentId="
 
+/**
+ * 種族を書き換える
+ */
 func FormatRace(r render.Render, params martini.Params, w http.ResponseWriter, req *http.Request) {
 	c := appengine.NewContext(req)
 	days, _ := strconv.Atoi(params["days"])
@@ -41,6 +44,24 @@ func FormatRace(r render.Render, params martini.Params, w http.ResponseWriter, r
 	r.JSON(200, t)
 }
 
+/**
+ * デッキタイプを登録する
+ */
+func ChangeType(r render.Render, params martini.Params, w http.ResponseWriter, req *http.Request) {
+	c := appengine.NewContext(req)
+	days, _ := strconv.Atoi(params["days"])
+	t := now().AddDate(0, 0, days) // x日前
+	histories := getTournamentHistoryByDate(t, c)
+	for i := range histories {
+		history := histories[i]
+		c.Infof("%d", history)
+	}
+	r.JSON(200, histories)
+}
+
+/**
+ * 更新処理
+ */
 func updateTournamentHistory(history TournamentHistory, c appengine.Context) (k *datastore.Key, err error) {
 	h := &TournamentHistory{}
 	h.Id = history.Id
