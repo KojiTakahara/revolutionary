@@ -19,3 +19,7 @@ type TournamentHistory struct {
 	Win        int
 	Date       time.Time
 }
+
+type Race struct {
+	TrueName string
+}

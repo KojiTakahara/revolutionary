@@ -3,3 +3,8 @@ cron:
   url: /cron/tournament_history/0
   schedule: every day 05:00
   timezone: Asia/Tokyo
+
+- description: format race
+  url: /cron/race/format/-1
+  schedule: every day 05:10
+  timezone: Asia/Tokyo

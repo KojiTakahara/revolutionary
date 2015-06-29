@@ -4,6 +4,7 @@ import (
 	"appengine"
 	"appengine/datastore"
 	"appengine/urlfetch"
+	"fmt"
 	"github.com/PuerkitoBio/goquery"
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/render"
@@ -15,6 +16,68 @@ import (
 )
 
 const vaultUrl = "http://dmvault.ath.cx/duel/tournament_history.php?tournamentId="
+
+func FormatRace(r render.Render, params martini.Params, w http.ResponseWriter, req *http.Request) {
+	c := appengine.NewContext(req)
+	days, _ := strconv.Atoi(params["days"])
+	t := now().AddDate(0, 0, days) // x日前
+	histories := getTournamentHistoryByDate(t, c)
+	for i := range histories {
+		history := histories[i]
+		if history.Race != "" && 0 <= strings.Index(history.Race, "..") {
+			race := Race{}
+			key := datastore.NewKey(c, "Race", history.Race, 0, nil)
+			if err := datastore.Get(c, key, &race); err != nil {
+				c.Warningf(err.Error() + " : " + history.Race)
+			} else if history.Race != race.TrueName {
+				history.Race = race.TrueName
+				_, err := updateTournamentHistory(history, c)
+				if err != nil {
+					c.Criticalf(err.Error())
+				}
+			}
+		}
+	}
+	r.JSON(200, t)
+}
+
+func updateTournamentHistory(history TournamentHistory, c appengine.Context) (k *datastore.Key, err error) {
+	h := &TournamentHistory{}
+	h.Id = history.Id
+	h.PlayerName = history.PlayerName
+	h.PlayerId = history.PlayerId
+	h.Type = history.Type
+	h.Race = history.Race
+	h.Light = history.Light
+	h.Water = history.Water
+	h.Dark = history.Dark
+	h.Fire = history.Fire
+	h.Nature = history.Nature
+	h.Zero = history.Zero
+	h.Win = history.Win
+	h.Date = history.Date
+	keyStr := h.Date.Format("20060102") + "_" + history.PlayerId
+	key := datastore.NewKey(c, "TournamentHistory", keyStr, 0, nil)
+	return datastore.Put(c, key, h)
+}
+
+/**
+ * 日付に一致するTournamentHistoryを取得
+ */
+func getTournamentHistoryByDate(t time.Time, c appengine.Context) []TournamentHistory {
+	dateStr := fmt.Sprintf("%d-%d-%d", t.Year(), t.Month(), t.Day())
+	start, _ := time.Parse("2006-1-2", dateStr)
+	end, _ := time.Parse("2006-1-2 15:04:05", dateStr+" 23:59:59")
+	q := datastore.NewQuery("TournamentHistory")
+	q = q.Filter("Date >=", start)
+	q = q.Filter("Date <=", end)
+	histories := make([]TournamentHistory, 0, 10)
+	_, err := q.GetAll(c, &histories)
+	if err != nil {
+		c.Criticalf(err.Error())
+	}
+	return histories
+}
 
 func CreateTournamentHistory(r render.Render, params martini.Params, w http.ResponseWriter, req *http.Request) {
 	tournamentId, _ := strconv.Atoi(params["tournamentId"])
