@@ -6,6 +6,7 @@ import (
 	"github.com/martini-contrib/render"
 	"net/http"
 	"net/url"
+	"strconv"
 	"time"
 )
 
@@ -29,5 +30,16 @@ func GetTournamentHistory(r render.Render, req *http.Request) {
 		r.JSON(400, err)
 		return
 	}
-	r.JSON(200, histories)
+	if len(params["count"]) != 0 {
+		count, _ := strconv.Atoi(params["count"][0])
+		newHistories := make([]TournamentHistory, 0, 10)
+		for i := range histories {
+			if count <= histories[i].Win {
+				newHistories = append(newHistories, histories[i])
+			}
+		}
+		r.JSON(200, newHistories)
+	} else {
+		r.JSON(200, histories)
+	}
 }
