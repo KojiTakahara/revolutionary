@@ -1,36 +1,73 @@
 <!doctype html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, maximum-scale=1">
-  <title>たいとる</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Dashboard</title>
   <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
   <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
   <link href="/css/angular-datepicker.min.css" rel="stylesheet" type="text/css" />
   <link href="/css/c3.min.css" rel="stylesheet" type="text/css">
+  <link href="/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+  <link href="/css/animate.css" rel="stylesheet" type="text/css" />
+  <link href="/css/admin.css" rel="stylesheet" type="text/css" />
 </head>
-<body ng-app="app" ng-controller="indexCtrl">
-  <button ng-click="viewColor()">文明</button>
-  <button ng-click="viewType()">タイプ</button>
-  <button ng-click="viewRace()">種族</button>
+<body class="light_theme blue_thm fixed_header left_nav_fixed" ng-app="app" ng-controller="indexCtrl">
+<div class="wrapper">
+  <div class="header_bar">
+    <div class="brand">
+      <div class="small_logo" style="display:none"><img src="images/s-logo.png" width="50" height="47" alt="s-logo" /> <img src="images/r-logo.png" width="122" height="20" alt="r-logo" /></div>
+    </div>
+    <div class="header_top_bar">
+      <a href="javascript:void(0);" class="menutoggle"> <i class="fa fa-bars"></i> </a>
+    </div>
+  </div>
+  <div class="inner">
+    <div class="left_nav">
+      <div class="search_bar"> <i class="fa fa-search"></i>
+        <input name="" type="text" class="search" placeholder="Search Dashboard..." />
+      </div>
 
-  <datepicker date-set="2015/06/01" date-format="yyyy-MM-dd">
-    <input ng-model="startDate" type="text" placeholder="start date" />
-  </datepicker>
-  <datepicker date-set="2015/06/01" date-format="yyyy-MM-dd">
-    <input ng-model="endDate" type="text" placeholder="end date"/>
-  </datepicker>
+      <button ng-click="submit()">ぼたん</button>
+      <button ng-click="viewColor()">文明</button>
+      <button ng-click="viewType()">タイプ</button>
+      <button ng-click="viewRace()">種族</button>
 
-  <button ng-click="submit()">ぼたん</button>
-
-  <div id="chart"></div>
-
+      <datepicker date-set="2015/06/01" date-format="yyyy-MM-dd">
+        <input ng-model="startDate" type="text" placeholder="start date" />
+      </datepicker>
+      <datepicker date-set="2015/06/01" date-format="yyyy-MM-dd">
+        <input ng-model="endDate" type="text" placeholder="end date"/>
+      </datepicker>
+    </div>
+    <div class="contentpanel">
+      <div class="pull-left breadcrumb_admin clear_both">
+      </div>
+      <div class="container clear_both padding_fix">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="block-web">
+              <div class="header">
+                <h3 class="content-header">Graph</h3>
+              </div>
+              <div class="porlets-content">
+                <div id="chart"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
   <script src="/js/d3.min.js"></script>
   <script src="/js/c3.min.js"></script>
+  <script src="/js/toggles.min.js"></script>
+  <script src="/js/common-script.js"></script>
   <script src="/js/app.js"></script>
   <script src="/js/angular-datepicker.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 </body>
 </html>
