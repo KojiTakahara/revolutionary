@@ -30,3 +30,16 @@ func CreateRaceData(r render.Render, req *http.Request) {
 	}
 	r.JSON(200, "")
 }
+
+func CreateDeckTypeData(r render.Render, req *http.Request) {
+	c := appengine.NewContext(req)
+	deckTypes := []*DeckType{&DeckType{Type: "黒単", Dark: true}}
+	for i := range deckTypes {
+		key := datastore.NewKey(c, "DeckType", "", 0, nil) // todo key
+		_, err := datastore.Put(c, key, deckTypes[i])
+		if err != nil {
+			c.Criticalf("save error. " + key.StringID())
+		}
+	}
+	r.JSON(200, "")
+}

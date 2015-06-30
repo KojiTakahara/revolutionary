@@ -13,9 +13,11 @@ func init() {
 	m.Use(render.Renderer())
 	m.Get("/cron/tournament_history/:tournamentId", CreateTournamentHistory)
 	m.Get("/cron/race/format/:days", FormatRace)
+	m.Get("/cron/type/change", ChangeType)
 	m.Get("/api/tournament_history", GetTournamentHistory)
 	// master data
 	m.Get("/api/master/race", CreateRaceData)
+	m.Get("/api/master/deckType", CreateDeckTypeData)
 	http.ListenAndServe(":8080", m)
 	http.Handle("/", m)
 }

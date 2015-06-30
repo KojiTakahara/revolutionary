@@ -49,9 +49,16 @@ func FormatRace(r render.Render, params martini.Params, w http.ResponseWriter, r
  */
 func ChangeType(r render.Render, params martini.Params, w http.ResponseWriter, req *http.Request) {
 	c := appengine.NewContext(req)
-	days, _ := strconv.Atoi(params["days"])
-	t := now().AddDate(0, 0, days) // x日前
-	histories := getTournamentHistoryByDate(t, c)
+	//days, _ := strconv.Atoi(params["days"])
+	//t := now().AddDate(0, 0, days) // x日前
+	//histories := getTournamentHistoryByDate(t, c)
+	q := datastore.NewQuery("TournamentHistory")
+	q = q.Filter("Type =", "")
+	histories := make([]TournamentHistory, 0, 10)
+	_, err := q.GetAll(c, &histories)
+	if err != nil {
+		c.Criticalf(err.Error())
+	}
 	for i := range histories {
 		history := histories[i]
 		c.Infof("%d", history)

@@ -23,3 +23,14 @@ type TournamentHistory struct {
 type Race struct {
 	TrueName string
 }
+
+type DeckType struct {
+	Type   string
+	Race   string
+	Light  bool
+	Water  bool
+	Dark   bool
+	Fire   bool
+	Nature bool
+	Zero   bool
+}
