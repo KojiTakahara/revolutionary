@@ -61,7 +61,13 @@ func ChangeType(r render.Render, params martini.Params, w http.ResponseWriter, r
 	}
 	for i := range histories {
 		history := histories[i]
-		c.Infof("%d", history)
+		q = datastore.NewQuery("DeckType")
+		q = q.Filter("Light =", history.Light)
+		types := make([]DeckType, 0, 10)
+		q.GetAll(c, &types)
+		if 0 < len(types) {
+
+		}
 	}
 	r.JSON(200, histories)
 }
