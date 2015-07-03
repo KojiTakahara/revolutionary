@@ -15,7 +15,7 @@ app.controller('indexCtrl', ['$scope', '$http', '$sce', '$window', function($sco
       params: {
         startDate: $scope.startDate,
         endDate: $scope.endDate,
-        // count: $scope.count
+        count: $scope.count
       }
     }).success(function(data) {
       $scope.data = data;
