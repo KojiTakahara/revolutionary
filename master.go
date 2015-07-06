@@ -33,7 +33,13 @@ func CreateRaceData(r render.Render, req *http.Request) {
 
 func CreateDeckTypeData(r render.Render, req *http.Request) {
 	c := appengine.NewContext(req)
-	deckTypes := []*DeckType{&DeckType{Type: "黒単", Dark: true}}
+	deckTypes := []*DeckType{
+		&DeckType{TrueType: "黒単", Race: "ファンキー・ナイトメア", Dark: true},
+		&DeckType{TrueType: "黒単", Race: "デスパペット", Dark: true},
+		&DeckType{TrueType: "モルトNEXT", Race: "ハンター", Type: "ブースト", Fire: true, Nature: true},
+		&DeckType{TrueType: "モルトNEXT", Race: "ヒューマノイド爆", Type: "ブースト", Fire: true, Nature: true},
+		&DeckType{TrueType: "モルトNEXT", Race: "ガイアール・コマンド・ドラゴン", Type: "ブースト", Fire: true, Nature: true},
+	}
 	for i := range deckTypes {
 		key := datastore.NewKey(c, "DeckType", "", 0, nil) // todo key
 		_, err := datastore.Put(c, key, deckTypes[i])

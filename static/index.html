@@ -28,10 +28,10 @@
 	<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
 		<form role="search">
 			<div class="form-group">
-        <datepicker date-set="2015/06/30" date-format="yyyy-MM-dd">
+        <datepicker date-format="yyyy-MM-dd">
           <input ng-model="startDate" class="form-control" type="text" placeholder="start date" />
         </datepicker>
-        <datepicker date-set="2015/06/30" date-format="yyyy-MM-dd">
+        <datepicker date-format="yyyy-MM-dd">
           <input ng-model="endDate" class="form-control" type="text" placeholder="end date"/>
         </datepicker>
         <input type="number" class="form-control" ng-model="count">
@@ -60,9 +60,7 @@
 				<div class="panel panel-default">
 					<div class="panel-heading">Line Chart</div>
 					<div class="panel-body">
-						<div class="canvas-wrapper">
-							<canvas class="main-chart" id="line-chart" height="200" width="600"></canvas>
-						</div>
+
 					</div>
 				</div>
 			</div>
@@ -71,11 +69,9 @@
 		<div class="row">
 			<div class="col-md-6">
 				<div class="panel panel-default">
-					<div class="panel-heading">Pie Chart</div>
+					<div class="panel-heading">デッキ分布</div>
 					<div class="panel-body">
-						<div class="canvas-wrapper">
-							<canvas class="chart" id="chart" ></canvas>
-						</div>
+						<div class="canvas-wrapper" id="typeChart"></div>
 					</div>
 				</div>
 			</div>
@@ -84,7 +80,6 @@
 					<div class="panel-heading">Doughnut Chart</div>
 					<div class="panel-body">
 						<div class="canvas-wrapper">
-							<canvas class="chart" id="doughnut-chart" ></canvas>
 						</div>
 					</div>
 				</div>

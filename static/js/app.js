@@ -4,9 +4,12 @@ var app = angular.module('app', [
   "720kb.datepicker"
 ]);
 
-app.controller('indexCtrl', ['$scope', '$http', '$sce', '$window', function($scope, $http, $sce, $window) {
+app.controller('indexCtrl', ['$scope', '$http', '$filter', '$sce', '$window', function($scope, $http, $filter, $sce, $window) {
 
   $scope.data = [];
+
+  $scope.startDate = $filter('date')(new Date(), "yyyy-MM-dd");
+  $scope.endDate = $filter('date')(new Date(), "yyyy-MM-dd");
 
   $scope.submit = function() {
     $http({
@@ -93,7 +96,7 @@ app.controller('indexCtrl', ['$scope', '$http', '$sce', '$window', function($sco
 
   var typeDonut = function(columns, title) {
     $scope.chart = c3.generate({
-      bindto: '#chart',
+      bindto: '#typeChart',
       data: {
         columns: columns,
         type : "donut"

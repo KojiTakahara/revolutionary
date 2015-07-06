@@ -17,14 +17,7 @@ import (
 
 const vaultUrl = "http://dmvault.ath.cx/duel/tournament_history.php?tournamentId="
 
-/**
- * 種族を書き換える
- */
-func FormatRace(r render.Render, params martini.Params, w http.ResponseWriter, req *http.Request) {
-	c := appengine.NewContext(req)
-	days, _ := strconv.Atoi(params["days"])
-	t := now().AddDate(0, 0, days) // x日前
-	histories := getTournamentHistoryByDate(t, c)
+func replaceRace(histories []TournamentHistory, c appengine.Context) {
 	for i := range histories {
 		history := histories[i]
 		if history.Race != "" && 0 <= strings.Index(history.Race, "..") {
@@ -41,6 +34,16 @@ func FormatRace(r render.Render, params martini.Params, w http.ResponseWriter, r
 			}
 		}
 	}
+}
+/**
+ * 種族を書き換える
+ */
+func FormatRace(r render.Render, params martini.Params, w http.ResponseWriter, req *http.Request) {
+	c := appengine.NewContext(req)
+	days, _ := strconv.Atoi(params["days"])
+	t := now().AddDate(0, 0, days) // x日前
+	histories := getTournamentHistoryByDate(t, c)
+	replaceRace(histories, c)
 	r.JSON(200, t)
 }
 
@@ -63,10 +66,22 @@ func ChangeType(r render.Render, params martini.Params, w http.ResponseWriter, r
 		history := histories[i]
 		q = datastore.NewQuery("DeckType")
 		q = q.Filter("Light =", history.Light)
+		q = q.Filter("Water =", history.Water)
+		q = q.Filter("Dark =", history.Dark)
+		q = q.Filter("Fire =", history.Fire)
+		q = q.Filter("Nature =", history.Nature)
+		q = q.Filter("Zero =", history.Zero)
+		if history.Race != "" {
+			q = q.Filter("Race =", history.Race)
+		}
+		if history.Type != "" {
+			q = q.Filter("Type =", history.Type)
+		}
 		types := make([]DeckType, 0, 10)
 		q.GetAll(c, &types)
 		if 0 < len(types) {
-
+			history.Type = types[0].TrueType
+			updateTournamentHistory(history, c)
 		}
 	}
 	r.JSON(200, histories)
@@ -121,17 +136,17 @@ func CreateTournamentHistory(r render.Render, params martini.Params, w http.Resp
 		tournamentId = int(math.Floor(d.Hours()/24)) + tournamentId
 	}
 	scrapingVault(tournamentId, req)
+	//replaceRace(histories, appengine.NewContext(req))
 	r.JSON(200, "")
 }
 
 func scrapingVault(id int, req *http.Request) {
 	c := appengine.NewContext(req)
+	//histories := make([]TournamentHistory, 0, 10)
 	client := urlfetch.Client(c)
 	resp, _ := client.Get(vaultUrl + strconv.Itoa(id))
 	doc, _ := goquery.NewDocumentFromResponse(resp)
-
 	date := getDate(doc)
-
 	winPlayers := []string{}
 	loop := true
 	gameCount := 1
@@ -192,7 +207,7 @@ func scrapingVault(id int, req *http.Request) {
 func getDate(doc *goquery.Document) time.Time {
 	info := doc.Find("#rightContainer p").Text()
 	runes := []rune(info)
-	date := now()
+	date := time.Now()
 	switch len(info) {
 	case 94:
 		date, _ = stringToTime(string(runes[5:20]))
