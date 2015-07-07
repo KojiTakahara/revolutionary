@@ -2,10 +2,11 @@
 
 var app = angular.module('app', [
   "720kb.datepicker",
+  "chartService",
   "c3Service"
 ]);
 
-app.controller('indexCtrl', ['$scope', '$http', '$filter', '$sce', '$window', "c3Service", function($scope, $http, $filter, $sce, $window, c3Service) {
+app.controller('indexCtrl', ['$scope', '$http', '$filter', '$sce', '$window', "chartService", "c3Service", function($scope, $http, $filter, $sce, $window, chartService, c3Service) {
 
   $scope.data = [];
   $scope.startDate = $filter('date')(new Date(), "yyyy-MM-dd");
@@ -27,71 +28,18 @@ app.controller('indexCtrl', ['$scope', '$http', '$filter', '$sce', '$window', "c
   };
 
   $scope.viewType = function() {
-    var obj = {};
-    for (var i = 0; i < $scope.data.length; i++) {
-      if ($scope.data[i].Type === "") {
-        continue;
-      }
-      if (obj[$scope.data[i].Type] === undefined) {
-        obj[$scope.data[i].Type] = 1;
-      } else {
-        obj[$scope.data[i].Type]++;
-      }
-    }
-    var columns = [];
-    for (var key in obj) {
-      columns.push([key, obj[key]]);
-    }
+    var columns = chartService.createTypeColumns($scope.data);
     $scope.chart = c3Service.drowDonutChart("#typeChart", columns, "deck type");
   };
 
   $scope.viewRace = function() {
-    var obj = {};
-    for (var i = 0; i < $scope.data.length; i++) {
-      if ($scope.data[i].Race === "") {
-        continue;
-      }
-      if (obj[$scope.data[i].Race] === undefined) {
-        obj[$scope.data[i].Race] = 1;
-      } else {
-        obj[$scope.data[i].Race]++;
-      }
-    }
-    var columns = [];
-    for (var key in obj) {
-      columns.push([key, obj[key]]);
-    }
+    var columns = chartService.createRaceColumns($scope.data);
     $scope.chart = c3Service.drowDonutChart("#typeChart", columns, "deck race");
   };
 
   $scope.viewColor = function() {
-    var light = ["light"],
-        water = ["water"],
-        dark = ["dark"],
-        fire = ["fire"],
-        nature = ["nature"],
-        zero = ["zero"];
-    for (var i = 0; i < $scope.data.length; i++) {
-      if ($scope.data[i].Light) {
-        light.push(1);
-      }
-      if ($scope.data[i].Water) {
-        water.push(1);
-      }
-      if ($scope.data[i].Dark) {
-        dark.push(1);
-      }
-      if ($scope.data[i].Fire) {
-        fire.push(1);
-      }
-      if ($scope.data[i].Nature) {
-        nature.push(1);
-      }
-      if ($scope.data[i].Zero) {
-        zero.push(1);
-      }
-    }
-    $scope.chart = c3Service.drowDonutChart("#typeChart", [light, water, dark, fire, nature, zero], "deck color");
+    var columns = chartService.createColorColumns($scope.data);
+    $scope.chart = c3Service.drowDonutChart("#typeChart", columns, "deck color");
   };
 
 }]);
