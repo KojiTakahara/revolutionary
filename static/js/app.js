@@ -1,13 +1,13 @@
 "use strict";
 
 var app = angular.module('app', [
-  "720kb.datepicker"
+  "720kb.datepicker",
+  "c3Service"
 ]);
 
-app.controller('indexCtrl', ['$scope', '$http', '$filter', '$sce', '$window', function($scope, $http, $filter, $sce, $window) {
+app.controller('indexCtrl', ['$scope', '$http', '$filter', '$sce', '$window', "c3Service", function($scope, $http, $filter, $sce, $window, c3Service) {
 
   $scope.data = [];
-
   $scope.startDate = $filter('date')(new Date(), "yyyy-MM-dd");
   $scope.endDate = $filter('date')(new Date(), "yyyy-MM-dd");
 
@@ -42,7 +42,7 @@ app.controller('indexCtrl', ['$scope', '$http', '$filter', '$sce', '$window', fu
     for (var key in obj) {
       columns.push([key, obj[key]]);
     }
-    typeDonut(columns, "deck type");
+    $scope.chart = c3Service.drowDonutChart("#typeChart", columns, "deck type");
   };
 
   $scope.viewRace = function() {
@@ -61,7 +61,7 @@ app.controller('indexCtrl', ['$scope', '$http', '$filter', '$sce', '$window', fu
     for (var key in obj) {
       columns.push([key, obj[key]]);
     }
-    typeDonut(columns, "deck race");
+    $scope.chart = c3Service.drowDonutChart("#typeChart", columns, "deck race");
   };
 
   $scope.viewColor = function() {
@@ -91,20 +91,7 @@ app.controller('indexCtrl', ['$scope', '$http', '$filter', '$sce', '$window', fu
         zero.push(1);
       }
     }
-    typeDonut([light, water, dark, fire, nature, zero], "deck color");
-  };
-
-  var typeDonut = function(columns, title) {
-    $scope.chart = c3.generate({
-      bindto: '#typeChart',
-      data: {
-        columns: columns,
-        type : "donut"
-      },
-      donut: {
-        title: title
-      }
-    });
+    $scope.chart = c3Service.drowDonutChart("#typeChart", [light, water, dark, fire, nature, zero], "deck color");
   };
 
 }]);
