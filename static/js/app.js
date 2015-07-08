@@ -9,8 +9,8 @@ var app = angular.module('app', [
 app.controller('indexCtrl', ['$scope', '$http', '$filter', '$sce', '$window', "chartService", "c3Service", function($scope, $http, $filter, $sce, $window, chartService, c3Service) {
 
   $scope.data = [];
-  $scope.startDate = $filter('date')(new Date(), "yyyy-MM-dd");
-  $scope.endDate = $filter('date')(new Date(), "yyyy-MM-dd");
+  $scope.startDate = moment().add(-7, "days").format('YYYY-MM-DD');
+  $scope.endDate = moment().format('YYYY-MM-DD');
 
   $scope.submit = function() {
     $http({
@@ -24,6 +24,7 @@ app.controller('indexCtrl', ['$scope', '$http', '$filter', '$sce', '$window', "c
     }).success(function(data) {
       $scope.data = data;
       $scope.viewType();
+      $scope.viewRace();
     });
   };
 
@@ -34,12 +35,7 @@ app.controller('indexCtrl', ['$scope', '$http', '$filter', '$sce', '$window', "c
 
   $scope.viewRace = function() {
     var columns = chartService.createRaceColumns($scope.data);
-    $scope.chart = c3Service.drowDonutChart("#typeChart", columns, "deck race");
-  };
-
-  $scope.viewColor = function() {
-    var columns = chartService.createColorColumns($scope.data);
-    $scope.chart = c3Service.drowDonutChart("#typeChart", columns, "deck color");
+    $scope.chart = c3Service.drowDonutChart("#typeRace", columns, "deck race");
   };
 
 }]);
