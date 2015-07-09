@@ -11,8 +11,26 @@ service.factory('c3Service', ['$http', '$q', function($http, $q) {
   service.drowDonutChart = function(bindTo, columns, title) {
     return c3.generate({
       bindto: bindTo,
-      data: { columns: columns, type : "donut" },
+      data: { columns: columns, type : "pie" },
       donut: { title: title }
+    });
+  };
+
+  service.drowTimeseriesChart = function(bindTo, columns) {
+    return c3.generate({
+      bindto: bindTo,
+      data: {
+        x: 'x',
+        columns: columns
+      },
+      axis: {
+        x: {
+          type: 'timeseries',
+          tick: {
+            format: '%Y-%m-%d'
+          }
+        }
+      }
     });
   };
 
