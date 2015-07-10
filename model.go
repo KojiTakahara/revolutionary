@@ -26,12 +26,12 @@ type Race struct {
 
 type DeckType struct {
 	TrueType string
-	Type   string
-	Race   string
-	Light  bool
-	Water  bool
-	Dark   bool
-	Fire   bool
-	Nature bool
-	Zero   bool
+	Type     string
+	Race     string
+	Light    bool
+	Water    bool
+	Dark     bool
+	Fire     bool
+	Nature   bool
+	Zero     bool
 }

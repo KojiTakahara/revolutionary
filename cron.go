@@ -35,6 +35,7 @@ func replaceRace(histories []TournamentHistory, c appengine.Context) {
 		}
 	}
 }
+
 /**
  * 種族を書き換える
  */
