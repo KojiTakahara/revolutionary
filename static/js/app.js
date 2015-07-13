@@ -23,23 +23,29 @@ app.controller('indexCtrl', ['$scope', '$http', '$filter', '$sce', '$window', "c
       }
     }).success(function(data) {
       $scope.data = data;
-      $scope.viewType();
-      $scope.viewRace();
-      $scope.viewTime();
+      viewType();
+      viewRace();
+      viewTime();
+      var toggleButton = $("#toggleButton");
+      if (!toggleButton.hasClass("collapsed")) {
+        toggleButton.click();
+      }
     });
   };
 
-  $scope.viewType = function() {
+  $scope.submit();
+
+  var viewType = function() {
     var columns = chartService.createTypeColumns($scope.data);
     $scope.chart = c3Service.drowDonutChart("#typeChart", columns, "deck type");
   };
 
-  $scope.viewRace = function() {
+  var viewRace = function() {
     var columns = chartService.createRaceColumns($scope.data);
     $scope.chart = c3Service.drowDonutChart("#typeRace", columns, "deck race");
   };
 
-  $scope.viewTime = function() {
+  var viewTime = function() {
     var colums = chartService.createTime($scope.data);
     $scope.chart = c3Service.drowTimeseriesChart("#typeTime", colums);
   };
