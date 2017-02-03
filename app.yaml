@@ -1,12 +1,16 @@
 application: dm-stat
-version: 1-0-0
+version: 2-0-0
 runtime: go
 api_version: go1
 skip_files:
   - ^(.*/)?.*/node_modules/.*
   - ^(.*/)?.*/test/.*
+  - ^(.*/)?.*/src/.*
+  - ^(.*/)?.*/build/.*
 
 handlers:
+
+#######################
 
 - url: /(.*\.(gif|png|jpg|pdf))
   static_files: static/\1
@@ -28,9 +32,15 @@ handlers:
   static_files: static/font/\1
   upload: static/font/(.*\.(eot|svg|ttf|woff))
 
+########################
+
+- url: /assets/scripts/(.*\.(js|map))
+  static_files: static/public/assets/scripts/\1
+  upload: static/public/assets/scripts/(.*\.(js|map))
+
 - url: /
-  static_files: static/index.html
-  upload: static/index.html
+  static_files: static/public/index.html
+  upload: static/public/index.html
 
 - url: /api/.*
   script: _go_app
