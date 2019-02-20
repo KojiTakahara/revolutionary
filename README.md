@@ -1,16 +1,28 @@
 # revolutionary
 
+## setup
+
+`$ go get github.com/labstack/echo`
+`$ go get github.com/dgrijalva/jwt-go`
+
+`$ cd static`
+`$ npm install`
+
 ## local development environment
 
 ### start
-`$goapp serve`
+`$ dev_appserver.py app.yaml`
+`$ cd static`
+`$ npm run build -- --watch`
 -> http://localhost:8080/
 
-### master data
-- http://localhost:8080/api/master/race
-- http://localhost:8080/api/master/deckType
-
 ### tournament data
-- http://localhost:8080/cron/tournament_history/{{tournamentId}}
+- http://localhost:8080/cron/v1/tournamentHistory/{{tournamentId}}
   - tournamentId = http://dmvault.ath.cx/duel/tournament_history.php?tournamentId=XXX
 
+## deploy
+
+`$ gcloud app deploy --project {PROJECT_ID} --version {VERSION}`
+
+#### Uploading cron jobs
+`$ gcloud app deploy cron.yaml`

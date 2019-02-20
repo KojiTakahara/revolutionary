@@ -1,3 +1,15 @@
-static/build/
+static/dist/
 static/node_modules/
 static/public/
+.python-version
+
+.gcloudignore
+.git
+.gitignore
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out

@@ -1,4 +1,4 @@
-package revolutionary
+package util
 
 import (
 	"fmt"
@@ -12,7 +12,7 @@ const location = "Asia/Tokyo"
 /**
  * 現在時刻を取得する
  */
-func now() time.Time {
+func Now() time.Time {
 	return time.Now().Local().In(time.FixedZone(location, 9*60*60))
 }
 
@@ -20,7 +20,7 @@ func now() time.Time {
  * 日付文字列をTimeに変える
  * @param 日付文字列(yyyy年MM月dd日hh時mm分)
  */
-func stringToTime(s string) (t time.Time, err error) {
+func StringToTime(s string) (t time.Time, err error) {
 	s = strings.Replace(s, "年", "_", -1)
 	s = strings.Replace(s, "月", "_", -1)
 	s = strings.Replace(s, "日", "_", -1)

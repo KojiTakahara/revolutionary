@@ -1,10 +1,15 @@
 cron:
 - description: regist history
-  url: /cron/tournament_history/0
+  url: /cron/v1/tournamentHistory/0
   schedule: every day 05:00
   timezone: Asia/Tokyo
 
-- description: format race
-  url: /cron/race/format/-1
-  schedule: every day 05:10
+# - description: format race
+#   url: /cron/race/format/-1
+#   schedule: every day 05:10
+#   timezone: Asia/Tokyo
+
+- description: update matchup
+  url: /cron/v1/matchUpLog/0
+  schedule: every day 06:00
   timezone: Asia/Tokyo
