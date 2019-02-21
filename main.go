@@ -27,6 +27,7 @@ func main() {
 	g.GET("/matchupLog", api.Find)
 	g.GET("/matchupLog/:key", api.Get)
 	g.GET("/tournament", api.GetTournamentHistory)
+	g.GET("/race", api.GetAndRegistRace)
 	c := e.Group("/cron/v1")
 	c.GET("/tournamentHistory/:tournamentId", cron.CreateTournamentHistory)
 	c.GET("/matchUpLog/:offset", cron.AddDeckTypeInfoToMatchUpLog)

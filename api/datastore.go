@@ -20,3 +20,25 @@ func GetTournamentHistoryByKey(ctx context.Context, keyStr string) (model.Tourna
 	err := datastore.Get(ctx, key, &tournamentHistory)
 	return tournamentHistory, err
 }
+
+func GetRaceByName(ctx context.Context, name string) (*model.Race, error) {
+	races := []model.Race{}
+	q := datastore.NewQuery("Race")
+	_, err := q.Filter("Name>=", name).Filter("Name<", name+"\ufffd").GetAll(ctx, &races)
+	if err != nil {
+		return nil, err
+	}
+	if len(races) != 0 {
+		return &races[0], nil
+	}
+	return nil, nil
+}
+
+func RegistRace(ctx context.Context, name string) (*model.Race, error) {
+	model := &model.Race{
+		Name: name,
+	}
+	key := datastore.NewKey(ctx, "Race", "", 0, nil)
+	_, err := datastore.Put(ctx, key, model)
+	return model, err
+}

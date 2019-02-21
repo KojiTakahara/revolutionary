@@ -3,7 +3,7 @@
 	overflow: auto;
 }
 .mat-table .type {
-	min-width: 50%;
+	min-width: 60%;
 }
 .mat-header-cell.mat-sort-header-sorted {
 	color: black;

@@ -22,6 +22,7 @@ export class MatchUpLog {
   OpponentZero: boolean;
   OpponentUseCards: string[];
   Url: string;
+  Format: string;
   Win: boolean;
   Date: Date;
 }

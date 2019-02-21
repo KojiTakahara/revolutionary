@@ -68,6 +68,9 @@ func Find(c echo.Context) error {
 		b, _ := strconv.ParseBool(c.QueryParam("win"))
 		q = q.Filter("Win =", b)
 	}
+	if len(c.QueryParam("format")) != 0 {
+		q = q.Filter("Format =", c.QueryParam("format"))
+	}
 	_, err := q.GetAll(ctx, &matchUpLogs)
 	if err != nil {
 		log.Errorf(ctx, "%v", err)

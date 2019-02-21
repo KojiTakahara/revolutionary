@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
@@ -7,23 +8,37 @@ import {
   MatFormFieldModule,
   MatInputModule,
   MAT_DATE_LOCALE,
-  MatButtonModule
+  MatButtonModule,
+  MatTableModule,
+  MatMenuModule,
+  MatIconModule,
+  MatDialogModule
 } from '@angular/material';
-import { MatMomentDateModule } from '@angular/material-moment-adapter';
-import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MatNativeDateModule } from '@angular/material/core';
+import { MatSortModule } from '@angular/material/sort';
+import { MatMomentDateModule, MomentDateAdapter } from '@angular/material-moment-adapter';
+
+import { Nl2BrPipeModule } from 'nl2br-pipe';
+import 'hammerjs';
 
 import { AppComponent } from './app.component';
-import 'hammerjs';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  OverviewDialogComponent,
+  AppComponentsPeriodViewComponent
+} from './components';
 
 const materialModules = [
   MatButtonModule,
+  MatDialogModule,
   MatDatepickerModule,
   MatNativeDateModule,
   MatFormFieldModule,
+  MatIconModule,
   MatInputModule,
-  MatMomentDateModule
+  MatMenuModule,
+  MatMomentDateModule,
+  MatTableModule,
+  MatSortModule
 ];
 
 const MY_DATE_FORMATS = {
@@ -38,9 +53,15 @@ const MY_DATE_FORMATS = {
   },
 };
 
+const COMPONETS = [
+  OverviewDialogComponent,
+  AppComponentsPeriodViewComponent
+];
+
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ...COMPONETS
   ],
   imports: [
     BrowserAnimationsModule,
@@ -48,10 +69,12 @@ const MY_DATE_FORMATS = {
     FormsModule,
     HttpClientModule,
     ReactiveFormsModule,
+    Nl2BrPipeModule,
     ...materialModules
   ],
   exports: [
-    MatDatepickerModule
+    MatDatepickerModule,
+    ...COMPONETS
   ],
   providers: [
     MatDatepickerModule,
@@ -60,10 +83,12 @@ const MY_DATE_FORMATS = {
       useClass: MomentDateAdapter,
       deps: [MAT_DATE_LOCALE]
     },
-    { provide: MAT_DATE_LOCALE, useValue: 'ja-JP' },
     {
-        provide: MAT_DATE_FORMATS,
-        useValue: MY_DATE_FORMATS
+      provide: MAT_DATE_LOCALE,
+      useValue: 'ja-JP' },
+    {
+      provide: MAT_DATE_FORMATS,
+      useValue: MY_DATE_FORMATS
     },
   ],
   bootstrap: [AppComponent]

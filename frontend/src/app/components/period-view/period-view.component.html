@@ -1,0 +1,54 @@
+<div>
+	<mat-form-field>
+		<input
+		matInput
+		[matDatepicker]="startPicker"
+		[formControl]="startDate"
+		placeholder="開始日"
+		>
+		<mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+		<mat-datepicker #startPicker></mat-datepicker>
+	</mat-form-field>
+	<mat-form-field>
+		<input
+		matInput
+		[matDatepicker]="endPicker"
+		[formControl]="endDate"
+		placeholder="終了日"
+		>
+		<mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+		<mat-datepicker #endPicker></mat-datepicker>
+	</mat-form-field>
+	</div>
+	<div class="mat-form-field-wrapper" style="text-align: center">
+	<button mat-raised-button color="primary"
+		(click)="search()">
+		検索
+	</button>
+</div>
+<div class="mat-elevation-z8">
+	<mat-table #table [dataSource]="dataSource" matSort>
+		<ng-container matColumnDef="type">
+		<mat-header-cell class="type" *matHeaderCellDef mat-sort-header>デッキタイプ</mat-header-cell>
+		<mat-cell class="type" *matCellDef="let element" [innerHTML]="element.type | nl2br" (click)="openDialog()"></mat-cell>
+		</ng-container>
+		<ng-container matColumnDef="games">
+		<mat-header-cell *matHeaderCellDef mat-sort-header>数</mat-header-cell>
+		<mat-cell *matCellDef="let element">{{element.games}}</mat-cell>
+		</ng-container>
+		<ng-container matColumnDef="win">
+		<mat-header-cell *matHeaderCellDef mat-sort-header>勝</mat-header-cell>
+		<mat-cell *matCellDef="let element">{{element.win}}</mat-cell>
+		</ng-container>
+		<ng-container matColumnDef="lose">
+		<mat-header-cell *matHeaderCellDef mat-sort-header>負</mat-header-cell>
+		<mat-cell *matCellDef="let element">{{element.lose}}</mat-cell>
+		</ng-container>
+		<ng-container matColumnDef="percentage">
+		<mat-header-cell *matHeaderCellDef mat-sort-header>率</mat-header-cell>
+		<mat-cell *matCellDef="let element">{{element.percentage | percent}}</mat-cell>
+		</ng-container>
+		<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+		<mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+	</mat-table>
+</div>  

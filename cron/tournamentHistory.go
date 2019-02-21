@@ -43,11 +43,14 @@ func scrapingVault(id int, c echo.Context) []*model.TournamentHistory {
 	resp, _ := client.Get(vaultUrl + tournamentUrl + strconv.Itoa(id))
 	doc, _ := goquery.NewDocumentFromResponse(resp)
 	date := getDate(doc)
+	tournamentInfo := doc.Find("#rightContainer > p").Text()
+	log.Infof(ctx, tournamentInfo)
+	formatName := getFormat(tournamentInfo)
 	winPlayers := []string{}
 	loop := true
 	gameCount := 1
 	for loop {
-		createMatchUpLog(ctx, doc, gameCount, date)
+		createMatchUpLog(ctx, doc, gameCount, date, formatName)
 		p := doc.Find("#game_" + strconv.Itoa(gameCount) + " div").Text()
 		winPlayers = append(winPlayers, p)
 		if p == "" {
@@ -55,9 +58,6 @@ func scrapingVault(id int, c echo.Context) []*model.TournamentHistory {
 		}
 		gameCount++
 	}
-	tournamentInfo := doc.Find("#rightContainer > p").Text()
-	log.Infof(ctx, tournamentInfo)
-	formatName := getFormat(tournamentInfo)
 	playerNames := []string{}
 	doc.Find(".player").Each(func(_ int, s *goquery.Selection) {
 		a := s.Find("a")
@@ -226,7 +226,7 @@ func fixRace(ctx context.Context, race string) string {
 /**
  * matchUpLogを登録する
  */
-func createMatchUpLog(ctx context.Context, doc *goquery.Document, gameCount int, date time.Time) {
+func createMatchUpLog(ctx context.Context, doc *goquery.Document, gameCount int, date time.Time, format string) {
 	clickEvent, _ := doc.Find("#game_" + strconv.Itoa(gameCount) + " input").Attr("onclick")
 	if strings.Contains(clickEvent, "window.open") {
 		winName := doc.Find("#game_" + strconv.Itoa(gameCount) + " .player").Text()
@@ -285,6 +285,7 @@ func createMatchUpLog(ctx context.Context, doc *goquery.Document, gameCount int,
 			OpponentId:       players["loseId"],
 			OpponentUseCards: loserCards,
 			Url:              url,
+			Format:           format,
 			Win:              true,
 			Date:             date,
 		}
@@ -298,6 +299,7 @@ func createMatchUpLog(ctx context.Context, doc *goquery.Document, gameCount int,
 			OpponentId:       players["winId"],
 			OpponentUseCards: winnerCards,
 			Url:              url,
+			Format:           format,
 			Win:              false,
 			Date:             date,
 		}

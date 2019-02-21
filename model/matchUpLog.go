@@ -26,6 +26,7 @@ type MatchUpLog struct {
 	OpponentZero     bool
 	OpponentUseCards []string `datastore:",noindex"`
 	Url              string   `datastore:",noindex"`
+	Format           string
 	Win              bool
 	Date             time.Time
 }

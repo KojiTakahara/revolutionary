@@ -1,33 +1,12 @@
-<div>
-  <mat-form-field>
-    <input
-      matInput
-      [matDatepicker]="startPicker"
-      [formControl]="startDate"
-      placeholder="開始日(from)"
-    >
-    <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
-    <mat-datepicker #startPicker></mat-datepicker>
-  </mat-form-field>
-  <mat-form-field>
-    <input
-      matInput
-      [matDatepicker]="endPicker"
-      [formControl]="endDate"
-      placeholder="終了日(to)"
-    >
-    <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
-    <mat-datepicker #endPicker></mat-datepicker>
-  </mat-form-field>
-</div>
-<div>
-  <button mat-raised-button color="primary"
-    (click)="search()">
-    検索
+<div style="text-align: right;">
+  <button mat-icon-button [matMenuTriggerFor]="menu">
+    <mat-icon>more_vert</mat-icon>
   </button>
-</div>
-<div>
-  <ul *ngFor="let w of winLosss">
-    <li>{{w.type}} {{w.win / (w.win + w.lose) | percent}}</li>
-  </ul>
-</div>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item>
+    <mat-icon>list</mat-icon>
+    <span>メニュー予定地</span>
+    </button>
+  </mat-menu>
+</div>	
+<app-components-period-view></app-components-period-view>
