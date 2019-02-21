@@ -1,7 +1,8 @@
 dist/
 node_modules/
-.python-version
+frontend/package-lock.json
 
+.python-version
 .gcloudignore
 .git
 .gitignore

@@ -2,6 +2,12 @@
 
 ## setup
 
+### download sdk for GAE
+
+- `https://cloud.google.com/appengine/docs/standard/go/download`
+
+### install
+
 - `$ go get github.com/labstack/echo`
 - `$ go get github.com/dgrijalva/jwt-go`
 - `$ cd static`
@@ -12,7 +18,7 @@
 ### start
 - `$ dev_appserver.py app.yaml`
   - `dev_appserver.py --clear_datastore=yes app.yaml`
-- `$ cd static`
+- `$ cd frontend`
 - `$ npm run build -- --watch`
 -> http://localhost:8080/
 
