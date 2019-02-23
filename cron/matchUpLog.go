@@ -2,6 +2,7 @@ package cron
 
 import (
 	"context"
+	"math"
 	"net/http"
 	"strconv"
 
@@ -16,11 +17,18 @@ func AddDeckTypeInfoToMatchUpLog(c echo.Context) error {
 	ctx := appengine.NewContext(c.Request())
 
 	t := []model.Tournament{}
-	offset, _ := strconv.Atoi(c.Param("offset"))
-	_, err := datastore.NewQuery("Tournament").Order("-Date").Limit(1).Offset(offset).GetAll(ctx, &t)
-	if len(t) == 0 || err != nil {
-		log.Errorf(ctx, "%v", err)
-		return err
+
+	tournamentId, _ := strconv.Atoi(c.Param("tournamentId"))
+	q := datastore.NewQuery("Tournament")
+	if tournamentId <= 0 {
+		offset := int(math.Abs(float64(tournamentId)))
+		if _, err := q.Order("-Date").Limit(1).Offset(offset).GetAll(ctx, &t); err != nil {
+			return err
+		}
+	} else {
+		if _, err := q.Filter("Id =", tournamentId).GetAll(ctx, &t); err != nil {
+			return err
+		}
 	}
 	date := t[0].Date
 

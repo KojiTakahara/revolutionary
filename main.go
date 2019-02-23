@@ -30,7 +30,7 @@ func main() {
 	g.GET("/race", api.GetAndRegistRace)
 	c := e.Group("/cron/v1")
 	c.GET("/tournamentHistory/:tournamentId", cron.CreateTournamentHistory)
-	c.GET("/matchUpLog/:offset", cron.AddDeckTypeInfoToMatchUpLog)
+	c.GET("/matchUpLog/:tournamentId", cron.AddDeckTypeInfoToMatchUpLog)
 
 	appengine.Main()
 }

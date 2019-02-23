@@ -105,7 +105,7 @@ func scrapingVault(id int, c echo.Context) []*model.TournamentHistory {
 			}
 		}
 	})
-	createTournament(ctx, formatName, playerNames, date)
+	createTournament(ctx, id, formatName, playerNames, date)
 	return histories
 }
 
@@ -253,28 +253,12 @@ func createMatchUpLog(ctx context.Context, doc *goquery.Document, gameCount int,
 
 		loserCards := []string{}
 		winnerCards := []string{}
-		if strings.Contains(matchUpDoc.Find(".m_l0").Text(), players["winName"]) {
-			matchUpDoc.Find(".m_l0 a").Each(func(_ int, s *goquery.Selection) {
-				if !contains(winnerCards, s.Text()) {
-					winnerCards = append(winnerCards, s.Text())
-				}
-			})
-			matchUpDoc.Find(".m_l1 a").Each(func(_ int, s *goquery.Selection) {
-				if !contains(loserCards, s.Text()) {
-					loserCards = append(loserCards, s.Text())
-				}
-			})
+		if strings.Contains(matchUpDoc.Find(".m_l0tap").Text(), players["winName"]) {
+			winnerCards = extractOnlyUsedCards(matchUpDoc, ".m_l0", winnerCards)
+			loserCards = extractOnlyUsedCards(matchUpDoc, ".m_l1", loserCards)
 		} else {
-			matchUpDoc.Find(".m_l0 a").Each(func(_ int, s *goquery.Selection) {
-				if !contains(loserCards, s.Text()) {
-					loserCards = append(loserCards, s.Text())
-				}
-			})
-			matchUpDoc.Find(".m_l1 a").Each(func(_ int, s *goquery.Selection) {
-				if !contains(winnerCards, s.Text()) {
-					winnerCards = append(winnerCards, s.Text())
-				}
-			})
+			loserCards = extractOnlyUsedCards(matchUpDoc, ".m_l0", loserCards)
+			winnerCards = extractOnlyUsedCards(matchUpDoc, ".m_l1", winnerCards)
 		}
 
 		model1 := &model.MatchUpLog{
@@ -308,6 +292,32 @@ func createMatchUpLog(ctx context.Context, doc *goquery.Document, gameCount int,
 	}
 }
 
+func extractOnlyUsedCards(doc *goquery.Document, class string, list []string) []string {
+	doc.Find(class).Each(func(_ int, s *goquery.Selection) {
+		if !containsNgWord(s.Text()) {
+			s.Find("a").Each(func(_ int, a *goquery.Selection) {
+				if !contains(list, a.Text()) {
+					list = append(list, a.Text())
+				}
+			})
+		}
+	})
+	return list
+}
+
+func containsNgWord(s string) bool {
+	if strings.Contains(s, "相手の") {
+		return true
+	}
+	if strings.Contains(s, "vs") {
+		return true
+	}
+	if strings.Contains(s, "攻撃") {
+		return true
+	}
+	return false
+}
+
 func putMatchUpLog(ctx context.Context, keyStr string, model *model.MatchUpLog) {
 	key := datastore.NewKey(ctx, "MatchUpLog", keyStr, 0, nil)
 	_, err := datastore.Put(ctx, key, model)
@@ -316,10 +326,11 @@ func putMatchUpLog(ctx context.Context, keyStr string, model *model.MatchUpLog) 
 	}
 }
 
-func createTournament(ctx context.Context, format string, participants []string, date time.Time) {
+func createTournament(ctx context.Context, id int, format string, participants []string, date time.Time) {
 	keyStr := date.Format("20060102")
 	key := datastore.NewKey(ctx, "Tournament", keyStr, 0, nil)
 	model := model.Tournament{
+		Id:           id,
 		Format:       format,
 		Participants: len(participants),
 		Date:         date,

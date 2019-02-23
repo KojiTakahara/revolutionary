@@ -1,0 +1,42 @@
+<h3>{{deckType}}</h3>
+
+
+<mat-tab-group>
+	<mat-tab label="vsデッキ">
+		<div class="mat-elevation-z8">
+			<mat-table #table [dataSource]="dataSource" matSort>
+				<ng-container matColumnDef="type">
+				<mat-header-cell class="type" *matHeaderCellDef mat-sort-header>相手デッキタイプ</mat-header-cell>
+				<mat-cell
+					class="type"
+					*matCellDef="let element"
+					[innerHTML]="element.type | nl2br">
+				</mat-cell>
+				</ng-container>
+				<ng-container matColumnDef="games">
+				<mat-header-cell *matHeaderCellDef mat-sort-header>数</mat-header-cell>
+				<mat-cell *matCellDef="let element">{{element.games}}</mat-cell>
+				</ng-container>
+				<ng-container matColumnDef="win">
+				<mat-header-cell *matHeaderCellDef mat-sort-header>勝</mat-header-cell>
+				<mat-cell *matCellDef="let element">{{element.win}}</mat-cell>
+				</ng-container>
+				<ng-container matColumnDef="lose">
+				<mat-header-cell *matHeaderCellDef mat-sort-header>負</mat-header-cell>
+				<mat-cell *matCellDef="let element">{{element.lose}}</mat-cell>
+				</ng-container>
+				<ng-container matColumnDef="percentage">
+				<mat-header-cell *matHeaderCellDef mat-sort-header>率</mat-header-cell>
+				<mat-cell *matCellDef="let element">{{element.percentage | percent}}</mat-cell>
+				</ng-container>
+				<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+				<mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+			</mat-table>
+		</div>
+	</mat-tab>
+	<mat-tab label="採用カード">
+		<mat-list>
+			<mat-list-item *ngFor="let card of useCards">{{card}}</mat-list-item>
+		</mat-list>
+	</mat-tab>
+</mat-tab-group>

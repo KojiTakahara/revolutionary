@@ -1,19 +1,7 @@
-/** table **/
-.mat-table {
-	overflow: auto;
+.header {
+	display: flex;
 }
-.mat-table .type {
-	min-width: 50%;
-}
-.mat-header-cell.mat-sort-header-sorted {
-	color: black;
-}
-.mat-header-cell {
-	white-space: nowrap !important;
-}
-.mat-cell {
-	word-wrap: break-word;
-}
-.mat-sort-header-arrow {
-	top: 4px;
+.menu {
+	width: 100%;
+	text-align: right
 }

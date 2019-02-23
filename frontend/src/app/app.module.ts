@@ -4,17 +4,22 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
-  MatDatepickerModule,
-  MatFormFieldModule,
-  MatInputModule,
-  MAT_DATE_LOCALE,
   MatButtonModule,
-  MatTableModule,
-  MatMenuModule,
+  MatCheckboxModule,
+  MatDatepickerModule,
+  MatDialogModule,
+  MatExpansionModule,
+  MatFormFieldModule,
   MatIconModule,
-  MatDialogModule
+  MatInputModule,
+  MatListModule,
+  MatMenuModule,
+  MatRadioModule,
+  MatTabsModule,
+  MatTableModule,
+  MAT_DATE_LOCALE
 } from '@angular/material';
-import { DateAdapter, MAT_DATE_FORMATS, MatNativeDateModule } from '@angular/material/core';
+import { DateAdapter, MatNativeDateModule, MAT_DATE_FORMATS } from '@angular/material/core';
 import { MatSortModule } from '@angular/material/sort';
 import { MatMomentDateModule, MomentDateAdapter } from '@angular/material-moment-adapter';
 
@@ -24,19 +29,25 @@ import 'hammerjs';
 import { AppComponent } from './app.component';
 import {
   OverviewDialogComponent,
+  AppComponentsDetailComponent,
   AppComponentsPeriodViewComponent
 } from './components';
 
 const materialModules = [
   MatButtonModule,
+  MatCheckboxModule,
   MatDialogModule,
   MatDatepickerModule,
-  MatNativeDateModule,
+  MatExpansionModule,
   MatFormFieldModule,
   MatIconModule,
   MatInputModule,
+  MatListModule,
   MatMenuModule,
   MatMomentDateModule,
+  MatNativeDateModule,
+  MatRadioModule,
+  MatTabsModule,
   MatTableModule,
   MatSortModule
 ];
@@ -55,6 +66,7 @@ const MY_DATE_FORMATS = {
 
 const COMPONETS = [
   OverviewDialogComponent,
+  AppComponentsDetailComponent,
   AppComponentsPeriodViewComponent
 ];
 
