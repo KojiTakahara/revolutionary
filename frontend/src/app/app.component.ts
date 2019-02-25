@@ -17,6 +17,7 @@ export class AppComponent implements OnInit {
   }
 
   setType(type: string, data) {
+    window.scrollTo(0, 0);
     this.type = type;
     this.deckType = data.type;
     this.logs = data.logs;

@@ -54,7 +54,9 @@
 <div class="mat-elevation-z8">
 	<mat-table #table [dataSource]="dataSource" matSort>
 		<ng-container matColumnDef="type">
-		<mat-header-cell class="type" *matHeaderCellDef mat-sort-header>デッキタイプ</mat-header-cell>
+		<mat-header-cell class="type" *matHeaderCellDef mat-sort-header>
+			<mat-icon>supervisor_account</mat-icon>
+		</mat-header-cell>
 		<mat-cell
 			class="type"
 			*matCellDef="let element"
@@ -62,21 +64,31 @@
 			(click)="move(element.type)">
 		</mat-cell>
 		</ng-container>
+
 		<ng-container matColumnDef="games">
-		<mat-header-cell *matHeaderCellDef mat-sort-header>数</mat-header-cell>
-		<mat-cell *matCellDef="let element">{{element.games}}</mat-cell>
+			<mat-header-cell *matHeaderCellDef mat-sort-header>
+				<mat-icon>supervisor_account</mat-icon>
+			</mat-header-cell>
+			<mat-cell *matCellDef="let element">{{element.games}}</mat-cell>
 		</ng-container>
+
 		<ng-container matColumnDef="win">
-		<mat-header-cell *matHeaderCellDef mat-sort-header>勝</mat-header-cell>
-		<mat-cell *matCellDef="let element">{{element.win}}</mat-cell>
+			<mat-header-cell *matHeaderCellDef mat-sort-header>
+				<mat-icon>sentiment_satisfied_alt</mat-icon>
+			</mat-header-cell>
+			<mat-cell *matCellDef="let element">{{element.win}}</mat-cell>
 		</ng-container>
 		<ng-container matColumnDef="lose">
-		<mat-header-cell *matHeaderCellDef mat-sort-header>負</mat-header-cell>
-		<mat-cell *matCellDef="let element">{{element.lose}}</mat-cell>
+			<mat-header-cell *matHeaderCellDef mat-sort-header>
+				<mat-icon>sentiment_very_dissatisfied</mat-icon>
+			</mat-header-cell>
+			<mat-cell *matCellDef="let element">{{element.lose}}</mat-cell>
 		</ng-container>
 		<ng-container matColumnDef="percentage">
-		<mat-header-cell *matHeaderCellDef mat-sort-header>率</mat-header-cell>
-		<mat-cell *matCellDef="let element">{{element.percentage | percent}}</mat-cell>
+			<mat-header-cell *matHeaderCellDef mat-sort-header>
+				<mat-icon>money</mat-icon>
+			</mat-header-cell>
+			<mat-cell *matCellDef="let element">{{element.percentage | percent}}</mat-cell>
 		</ng-container>
 		<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
 		<mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>

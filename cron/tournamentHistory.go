@@ -253,10 +253,11 @@ func createMatchUpLog(ctx context.Context, doc *goquery.Document, gameCount int,
 
 		loserCards := []string{}
 		winnerCards := []string{}
-		if strings.Contains(matchUpDoc.Find(".m_l0tap").Text(), players["winName"]) {
+		if strings.Contains(matchUpDoc.Find(".m_l0").Text(), "勝利でゲームは終了しました") {
 			winnerCards = extractOnlyUsedCards(matchUpDoc, ".m_l0", winnerCards)
 			loserCards = extractOnlyUsedCards(matchUpDoc, ".m_l1", loserCards)
-		} else {
+		}
+		if strings.Contains(matchUpDoc.Find(".m_l1").Text(), "勝利でゲームは終了しました") {
 			loserCards = extractOnlyUsedCards(matchUpDoc, ".m_l0", loserCards)
 			winnerCards = extractOnlyUsedCards(matchUpDoc, ".m_l1", winnerCards)
 		}

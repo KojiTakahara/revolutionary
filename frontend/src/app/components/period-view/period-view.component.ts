@@ -17,7 +17,7 @@ export class AppComponentsPeriodViewComponent implements OnInit {
 
   constructor(private http: HttpClient) {}
 
-  baseUrl = ''; // 'http://localhost:8080';
+  baseUrl = 'http://localhost:8080';
 
   startDate: FormControl = new FormControl(moment().add(-7, 'days'));
   endDate: FormControl = new FormControl(moment());
@@ -53,7 +53,13 @@ export class AppComponentsPeriodViewComponent implements OnInit {
         const deckType = this.getDeckType(m);
         if (!types.includes(deckType)) {
           types.push(deckType);
-          const w = {type: deckType, win: 0, lose: 0};
+          const w = {
+            type: deckType,
+            win: 0,
+            lose: 0,
+            race: m.PlayerRace,
+            tempType: m.PlayerType
+          };
           common.addCount(w, m);
           winLosss.push(w);
         } else if (deckType !== '') {
@@ -63,9 +69,25 @@ export class AppComponentsPeriodViewComponent implements OnInit {
           common.addCount(winLoss, m);
         }
       });
+      this.http.get<any>(this.baseUrl + '/api/v1/tournament', {
+        params: new HttpParams()
+        .set('startDate', this.startDate.value.format('YYYY-MM-DD'))
+        .set('endDate', this.endDate.value.format('YYYY-MM-DD'))
+      }).subscribe((r: any) => { console.log('sum:' + r.length); });
       winLosss.forEach((w: any) => {
         w.games = w.win + w.lose;
         w.percentage = w.win / (w.win + w.lose);
+
+        const o = {
+          params: new HttpParams()
+            .set('startDate', this.startDate.value.format('YYYY-MM-DD'))
+            .set('endDate', this.endDate.value.format('YYYY-MM-DD'))
+            .set('race', w.race)
+            .set('type', w.tempType)
+        };
+        this.http.get<any>(this.baseUrl + '/api/v1/tournament', o).subscribe((r: any) => {
+          console.log(r.length);
+        });
       });
       this.winLosss = winLosss;
       this.sortedData = this.winLosss.slice();
