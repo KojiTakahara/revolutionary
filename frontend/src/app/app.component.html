@@ -1,0 +1,26 @@
+<div class="header">
+  <div class="close" *ngIf="type === 'detail'">
+    <button mat-icon-button (click)="type = 'search'">
+      <mat-icon>backspace</mat-icon>
+    </button>
+  </div>
+  <div class="menu">
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item>
+      <mat-icon>list</mat-icon>
+      <span>メニュー予定地</span>
+      </button>
+    </mat-menu>
+  </div>
+</div>	
+<app-components-period-view
+  [ngStyle]="{'display': (type === 'search') ? '' : 'none'}"
+  (moveDetail)="setType('detail', $event)">
+</app-components-period-view>
+<app-components-detail *ngIf="type === 'detail'"
+  [deckType]="deckType"
+  [matchUpLogs]="logs">
+</app-components-detail>

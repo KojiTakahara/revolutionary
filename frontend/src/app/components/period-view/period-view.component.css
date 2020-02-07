@@ -1,0 +1,43 @@
+/** form **/
+mat-expansion-panel {
+	box-shadow: none !important;
+}
+mat-expansion-panel-header:hover {
+	background: none !important;
+}
+mat-panel-title {
+	justify-content: center;
+}
+mat-radio-button {
+	margin-right: 10px;
+}
+.detail-form {
+	margin-bottom: 10px;
+}
+mat-checkbox {
+	margin-right: 5px;
+}
+.mat-checkbox-layout .mat-checkbox-inner-container {
+	margin-right: 4px !important;
+}
+
+/** table **/
+.mat-table {
+	overflow: auto;
+}
+.mat-table .type {
+	min-width: 60%;
+	cursor: pointer;
+}
+.mat-header-cell.mat-sort-header-sorted {
+	color: black;
+}
+.mat-header-cell {
+	white-space: nowrap !important;
+}
+.mat-cell {
+	word-wrap: break-word;
+}
+.mat-sort-header-arrow {
+	top: 4px;
+}

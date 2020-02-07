@@ -1,12 +1,10 @@
-application: dm-stat
-version: 2-0-0
-runtime: go
-api_version: go1
-skip_files:
-  - ^(.*/)?.*/node_modules/.*
-  - ^(.*/)?.*/test/.*
-  - ^(.*/)?.*/src/.*
-  - ^(.*/)?.*/build/.*
+runtime: go111
+
+# skipfilesがgo111でdeprecated.代わりに.gcloudignoreを使う
+#   - ^(.*/)?.*/node_modules/.*
+#   - ^(.*/)?.*/test/.*
+#   - ^(.*/)?.*/src/.*
+#   - ^(.*/)?.*/build/.*
 
 handlers:
 
@@ -18,9 +16,13 @@ handlers:
 #   static_files: static/img/\1
 #   upload: static/img/favicon.ico
 
-# - url: /css/(.*\.(css|map))
-#   static_files: static/css/\1
-#   upload: static/css/(.*\.(css|map))
+  - url: /frontend/(.*\.(gif|png|jpeg|jpg|css|js|ico))$
+    static_files: dist/\1
+    upload: dist/(.*)
+
+  # - url: /(.*\.(css|map))
+  #   static_files: static/\1
+  #   upload: static/(.*\.(css|map))
 
 # - url: /js/(.*\.(js|map))
 #   static_files: static/js/\1
@@ -30,16 +32,16 @@ handlers:
 #   static_files: static/font/\1
 #   upload: static/font/(.*\.(eot|svg|ttf|woff))
 
-- url: /assets/scripts/(.*\.(js|map))
-  static_files: static/public/assets/scripts/\1
-  upload: static/public/assets/scripts/(.*\.(js|map))
+# - url: /assets/scripts/(.*\.(js|map))
+#   static_files: static/public/assets/scripts/\1
+#   upload: static/dist/assets/scripts/(.*\.(js|map))
 
-- url: /
-  static_files: static/public/index.html
-  upload: static/public/index.html
+  - url: /
+    static_files: dist/index.html
+    upload: dist/index.html
 
-- url: /api/.*
-  script: _go_app
+  - url: /api/.*
+    script: auto
 
-- url: /cron/.*
-  script: _go_app
+  - url: /cron/.*
+    script: auto

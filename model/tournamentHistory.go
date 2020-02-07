@@ -1,8 +1,6 @@
-package revolutionary
+package model
 
-import (
-	"time"
-)
+import "time"
 
 type TournamentHistory struct {
 	Id         int
@@ -17,21 +15,6 @@ type TournamentHistory struct {
 	Nature     bool
 	Zero       bool
 	Win        int
+	Format     string
 	Date       time.Time
-}
-
-type Race struct {
-	TrueName string
-}
-
-type DeckType struct {
-	TrueType string
-	Type     string
-	Race     string
-	Light    bool
-	Water    bool
-	Dark     bool
-	Fire     bool
-	Nature   bool
-	Zero     bool
 }
