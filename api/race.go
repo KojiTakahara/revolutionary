@@ -17,9 +17,9 @@ func GetAndRegistRace(c echo.Context) error {
 	resp, _ := client.Get(url)
 	doc, _ := goquery.NewDocumentFromResponse(resp)
 	races := []string{}
-	doc.Find("#race > option").Each(func(_ int, s *goquery.Selection) {
+	doc.Find("[name=race] > option").Each(func(_ int, s *goquery.Selection) {
 		race := s.Text()
-		if race != "全ての項目から検索する" {
+		if race != "種族" {
 			result, _ := GetRaceByName(ctx, race)
 			if result == nil {
 				RegistRace(ctx, race)
