@@ -26,8 +26,9 @@ mat-checkbox {
 	overflow: auto;
 }
 .mat-table .type {
-	min-width: 60%;
 	cursor: pointer;
+	padding-right: 1em;
+	min-width: 40%;
 }
 .mat-header-cell.mat-sort-header-sorted {
 	color: black;
@@ -35,8 +36,21 @@ mat-checkbox {
 .mat-header-cell {
 	white-space: nowrap !important;
 }
+.mat-header-cell:nth-child(2) {
+	min-width: 14%;
+}
+.mat-header-cell:nth-child(3) {
+	padding-left: 1.5em;
+}
 .mat-cell {
 	word-wrap: break-word;
+}
+.mat-cell:nth-child(2) {
+	padding-right: 1em;
+	min-width: 14%;
+}
+.mat-cell:nth-child(5) {
+	min-width: 10%;
 }
 .mat-sort-header-arrow {
 	top: 4px;

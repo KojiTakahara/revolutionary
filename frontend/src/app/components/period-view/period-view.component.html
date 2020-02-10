@@ -55,38 +55,38 @@
 	<mat-table #table [dataSource]="dataSource" matSort>
 		<ng-container matColumnDef="type">
 		<mat-header-cell class="type" *matHeaderCellDef mat-sort-header>
-			<mat-icon>supervisor_account</mat-icon>
+			デッキタイプ
 		</mat-header-cell>
 		<mat-cell
 			class="type"
 			*matCellDef="let element"
 			[innerHTML]="element.type | nl2br"
-			(click)="move(element.type)">
+			(click)="move(element)">
 		</mat-cell>
 		</ng-container>
 
-		<ng-container matColumnDef="games">
+		<ng-container matColumnDef="users">
 			<mat-header-cell *matHeaderCellDef mat-sort-header>
-				<mat-icon>supervisor_account</mat-icon>
+				Meta
 			</mat-header-cell>
-			<mat-cell *matCellDef="let element">{{element.games}}</mat-cell>
+			<mat-cell *matCellDef="let element">{{element.users / total | percent:'1.1'}}</mat-cell>
 		</ng-container>
 
 		<ng-container matColumnDef="win">
 			<mat-header-cell *matHeaderCellDef mat-sort-header>
-				<mat-icon>sentiment_satisfied_alt</mat-icon>
+				勝
 			</mat-header-cell>
 			<mat-cell *matCellDef="let element">{{element.win}}</mat-cell>
 		</ng-container>
 		<ng-container matColumnDef="lose">
 			<mat-header-cell *matHeaderCellDef mat-sort-header>
-				<mat-icon>sentiment_very_dissatisfied</mat-icon>
+				負
 			</mat-header-cell>
 			<mat-cell *matCellDef="let element">{{element.lose}}</mat-cell>
 		</ng-container>
 		<ng-container matColumnDef="percentage">
 			<mat-header-cell *matHeaderCellDef mat-sort-header>
-				<mat-icon>money</mat-icon>
+				勝率
 			</mat-header-cell>
 			<mat-cell *matCellDef="let element">{{element.percentage | percent}}</mat-cell>
 		</ng-container>

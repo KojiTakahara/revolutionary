@@ -25,10 +25,10 @@ export class AppComponentsPeriodViewComponent implements OnInit {
   winLosss: any[];
   sortedData: any[];
   matchUpLogs: MatchUpLog[];
-
+  total = 0;
   format = '殿堂';
 
-  displayedColumns = ['type', 'win', 'lose', 'percentage'];
+  displayedColumns = ['type', 'users', 'win', 'lose', 'percentage'];
   dataSource;
 
   @Output() moveDetail: EventEmitter<any> = new EventEmitter();
@@ -39,6 +39,7 @@ export class AppComponentsPeriodViewComponent implements OnInit {
   }
 
   search(): void {
+    this.total = 0;
     const options = {
       params: new HttpParams()
         .set('startDate', this.startDate.value.format('YYYY-MM-DD'))
@@ -50,7 +51,7 @@ export class AppComponentsPeriodViewComponent implements OnInit {
       const winLosss: {[key: string]: any}[] = [];
       this.matchUpLogs = res;
       res.forEach((m: MatchUpLog) => {
-        const deckType = this.getDeckType(m);
+        const deckType = this.getPlayerType(m) || this.getDeckType(m);
         if (!types.includes(deckType)) {
           types.push(deckType);
           const w = {
@@ -58,7 +59,7 @@ export class AppComponentsPeriodViewComponent implements OnInit {
             win: 0,
             lose: 0,
             race: m.PlayerRace,
-            tempType: m.PlayerType
+            tempType: this.getPlayerType(m)
           };
           common.addCount(w, m);
           winLosss.push(w);
@@ -69,24 +70,18 @@ export class AppComponentsPeriodViewComponent implements OnInit {
           common.addCount(winLoss, m);
         }
       });
-      this.http.get<any>(this.baseUrl + '/api/v1/tournament', {
-        params: new HttpParams()
-        .set('startDate', this.startDate.value.format('YYYY-MM-DD'))
-        .set('endDate', this.endDate.value.format('YYYY-MM-DD'))
-      }).subscribe((r: any) => { console.log('sum:' + r.length); });
       winLosss.forEach((w: any) => {
         w.games = w.win + w.lose;
         w.percentage = w.win / (w.win + w.lose);
-
-        const o = {
-          params: new HttpParams()
-            .set('startDate', this.startDate.value.format('YYYY-MM-DD'))
-            .set('endDate', this.endDate.value.format('YYYY-MM-DD'))
-            .set('race', w.race)
-            .set('type', w.tempType)
-        };
+        let o: any = {params: null};
+        if (w.tempType === '') {
+          o.params = Object.assign({}, options).params.append('race', w.race);
+        } else {
+          o.params = Object.assign({}, options).params.append('type', w.tempType);
+        }
         this.http.get<any>(this.baseUrl + '/api/v1/tournament', o).subscribe((r: any) => {
-          console.log(r.length);
+          w.users = r.length;
+          this.total += r.length;
         });
       });
       this.winLosss = winLosss;
@@ -96,15 +91,22 @@ export class AppComponentsPeriodViewComponent implements OnInit {
     });
   }
 
-  move(type) {
+  move(element) {
     const logs = [];
     this.matchUpLogs.forEach((m: MatchUpLog) => {
-      if (type === this.getDeckType(m)) {
-        logs.push(m);
+      if (element.type) {
+        if (element.type === this.getPlayerType(m)) {
+          logs.push(m);
+        }
+      } else {
+        if (element.type === this.getDeckType(m)) {
+          logs.push(m);
+        }
       }
     });
     this.moveDetail.emit({
-      type: type,
+      type: element.type,
+      process: [],
       logs: logs
     });
   }
@@ -113,14 +115,18 @@ export class AppComponentsPeriodViewComponent implements OnInit {
     let deckType = '';
     if (m.PlayerType !== '' && m.PlayerRace !== '') {
       const str = common.isMobile() ? '\n' : '';
-      deckType = m.PlayerType + str + '(' + m.PlayerRace + ')';
+      deckType = this.getPlayerType(m) + str + '(' + m.PlayerRace + ')';
     } else if (m.PlayerType !== '') {
-      deckType = m.PlayerType;
+      deckType = this.getPlayerType(m);
     } else if (m.PlayerRace !== '') {
       deckType = '(' + m.PlayerRace + ')';
     } else {
       deckType = 'その他';
     }
     return deckType;
+  }
+
+  private getPlayerType(m: MatchUpLog): string {
+    return m.PlayerType.replace('..', '');
   }
 }
