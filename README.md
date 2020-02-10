@@ -18,17 +18,21 @@
 ### start
 - `$ dev_appserver.py app.yaml`
   - `dev_appserver.py --clear_datastore=yes app.yaml`
+  - -> http://localhost:8080/
 - `$ cd frontend`
-- `$ npm run build -- --watch`
--> http://localhost:8080/
+- `$ npm run build -- --watch` (Release build)
+- `$ npm run start` (Local build)
+  - -> http://localhost:4200/
 
-### master data
+### create data
 
-- http://localhost:8080/api/v1/race
-
-### tournament data
-- http://localhost:8080/cron/v1/tournamentHistory/{{tournamentId}}
-  - tournamentId = http://dmvault.ath.cx/duel/tournament_history.php?tournamentId=XXX
+- rase data
+  - http://localhost:8080/api/v1/race
+- tournament data
+  - http://localhost:8080/cron/v1/tournamentHistory/{tournamentId}
+    - tournamentId = http://dmvault.ath.cx/duel/tournament_history.php?tournamentId=XXX
+- matchUpLog
+  - http://localhost:8080/cron/v1/matchUpLog/{tournamentId}
 
 ## deploy
 
