@@ -1,5 +1,5 @@
 runtime: go111
-service: revolutionary
+service: default
 
 handlers:
 
