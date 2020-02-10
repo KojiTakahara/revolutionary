@@ -12,7 +12,6 @@ indexes:
   - name: "Date"
 - kind: "TournamentHistory"
   properties:
-  - name: "Race"
   - name: "Type"
   - name: "Date"
 - kind: "TournamentHistory"
@@ -21,6 +20,7 @@ indexes:
   - name: "Date"
 - kind: "TournamentHistory"
   properties:
+  - name: "Race"
   - name: "Type"
   - name: "Date"
 - kind: "MatchUpLog"
