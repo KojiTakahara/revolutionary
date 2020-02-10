@@ -32,17 +32,6 @@ func GetTournamentHistory(e echo.Context) error {
 	_, err := q.GetAll(ctx, &histories)
 	if err != nil {
 		log.Errorf(ctx, "%v", err)
-		// 	return e.JSON(http.StatusNoContent, err)
 	}
-	// if len(e.QueryParam("count")) != 0 {
-	// 	count, _ := strconv.Atoi(e.QueryParam("count"))
-	// 	newHistories := make([]model.TournamentHistory, 0, 10)
-	// 	for i := range histories {
-	// 		if count <= histories[i].Win {
-	// 			newHistories = append(newHistories, histories[i])
-	// 		}
-	// 	}
-	// 	return e.JSON(http.StatusOK, newHistories)
-	// }
 	return e.JSON(http.StatusOK, histories)
 }

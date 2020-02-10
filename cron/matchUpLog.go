@@ -53,8 +53,6 @@ func AddDeckTypeInfoToMatchUpLog(c echo.Context) error {
 		ms[i].OpponentFire = opponent.Fire
 		ms[i].OpponentNature = opponent.Nature
 		ms[i].OpponentZero = opponent.Zero
-		// key := datastore.NewKey(c, "TournamentHistory", keyStr, 0, nil)
-		// datastore.Put(ctx, key, &ms[i])
 	}
 	datastore.PutMulti(ctx, keys, ms)
 	return c.JSON(http.StatusOK, ms)
