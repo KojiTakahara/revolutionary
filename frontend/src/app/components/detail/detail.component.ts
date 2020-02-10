@@ -20,12 +20,13 @@ export class AppComponentsDetailComponent implements OnInit {
   winLosss: any[];
   sortedData: any[];
   useCards: string[] = [];
-  urls: string[] = [];
+  winLogs: any[] = [];
+  loseLogs: any[] = [];
 
   ngOnInit() {
     this.matchUpLogs.forEach((log: MatchUpLog) => {
       this.setCards(log.PlayerUseCards);
-      this.setUrls(log.Url);
+      this.setLogs(log);
     });
     this.hoge(this.matchUpLogs);
   }
@@ -58,9 +59,15 @@ export class AppComponentsDetailComponent implements OnInit {
     this.dataSource.sort = this.sort;
   }
 
-  setUrls(url: string) {
-    if (!this.urls.includes(url)) {
-      this.urls.push(url);
+  setLogs(log: MatchUpLog) {
+    if (log.Win) {
+      if (!this.winLogs.some((w: any) => w.Url === log.Url)) {
+        this.winLogs.push(log);
+      }
+    } else {
+      if (!this.loseLogs.some((l: any) => l.Url === log.Url)) {
+        this.loseLogs.push(log);
+      }
     }
   }
 
@@ -79,7 +86,7 @@ export class AppComponentsDetailComponent implements OnInit {
       const str = common.isMobile() ? '\n' : '';
       deckType = m.OpponentType + str + '(' + m.OpponentRace + ')';
     } else if (m.OpponentType !== '') {
-      deckType = m.OpponentType;
+      deckType = m.OpponentType.replace('..', '');
     } else if (m.OpponentRace !== '') {
       deckType = '(' + m.OpponentRace + ')';
     } else {

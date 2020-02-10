@@ -39,4 +39,18 @@
 			<mat-list-item *ngFor="let card of useCards">{{card}}</mat-list-item>
 		</mat-list>
 	</mat-tab>
+	<mat-tab label="対戦ログ">
+		<h3>勝</h3>
+		<mat-list>
+			<mat-list-item *ngFor="let log of winLogs">
+				<a [href]="log.Url" target="_blank">{{log.OpponentType}}:{{log.OpponentRace}}</a>
+			</mat-list-item>
+		</mat-list>
+		<h3>負</h3>
+		<mat-list>
+			<mat-list-item *ngFor="let log of loseLogs">
+				<a [href]="log.Url" target="_blank">{{log.OpponentType}}:{{log.OpponentRace}}</a>
+			</mat-list-item>
+		</mat-list>
+	</mat-tab>
 </mat-tab-group>
